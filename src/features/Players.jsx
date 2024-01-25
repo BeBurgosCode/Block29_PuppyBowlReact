@@ -1,63 +1,50 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useGetPlayersQuery } from "../api/puppyBowlApi";
 import "../index.css";
-import { Link, useNavigate } from "react-router-dom";
 
 const Players = () => {
-  const players = useSelector((state) => state.players);
-  const navigate = useNavigate();
-
   const { data = {}, error, isLoading } = useGetPlayersQuery();
+  const [playersData, setPlayersData] = useState([]);
+
+  useEffect(() => {
+    if (data && data.data && data.data.players) {
+      setPlayersData(data.data.players);
+    }
+  }, [data]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>loading...</div>;
   }
 
-  // Show an error message if the fetch failed
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>error fetching player: {error.message}</div>;
   }
-// This helps navigate to player details page
-  const handleDetailsClick = (playerId) => {navigate(`/player/${playerId}`);
-};
-  // Show the fetched data after it has arrived
+
   return (
     <div className="players">
-      {/* Map through the data array and generate a div for each player */}
-      {data?.data?.players?.map((player) => (
-       
-       <div key={player.id} className="player-card">
-       <Link to={`/player/${player.id}`} className="player-link"
+      {playersData.map((player) => (
+        <Link
+          to={`/players/${player.id}`}
+          key={player.id}
+          className="player-link"
         >
-          <div className="player-image-container">
+          <div className="player-card">
             <img
-              className="player-image"
               src={player.imageUrl}
               alt={player.name}
+              className="player-image"
             />
-          </div>
 
-          {/* Display the player's image, with the player's name as alt text */}
-
-          <div className="player-details">
-            <h2> {player.name} </h2>
-            <p>{player.id}</p>
-
-            <p> {player.breed} </p>
-
-            <p> {player.status} </p>
+            <div className="player-details">
+              <h2>{player.name}</h2>
+              <p>Breed: {player.breed}</p>
+              <p>Status: {player.status}</p>
+            </div>
           </div>
         </Link>
-        {/* button creates a click button */}
-<button onClick={()=> handleDetailsClick(player.id)}>
-Details
-</button>
-
-        </div>
       ))}
     </div>
   );
 };
-
 export default Players;

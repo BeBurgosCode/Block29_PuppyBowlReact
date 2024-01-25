@@ -1,34 +1,39 @@
  import {createSlice} from "@reduxjs/toolkit";
  import { puppyBowlApi } from "../api/puppyBowlApi";
+import * as search from "../api/search"
 
 
- export const playerSlice = createSlice({
+  const playerSlice = createSlice({
     name: 'players',
     initialState: {
-      list: [],
+      players: [],
+      searchQuery: "",
     },
-    reducers: {
-      addPlayer: (state, action) => {
-        state.list = [...state.list, action.payload];
-      },
+    
+      reducers: {
+        setSearchQuery: (state, action) => {
+          state.searchQuery = action.payload;
+        },
     },
     extraReducers: (builder) => { 
       builder.addMatcher(
         puppyBowlApi.endpoints.getPlayers.matchFulfilled,
         (state, { payload }) => {
-          return { ...state, list: payload.data.players };
-        }
-      );
-      builder.addMatcher(
-        puppyBowlApi.endpoints.createPlayer.matchFulfilled,
-        (state, { payload }) => {
-          state.list = [...state.list, payload];
-        }
+            state.players = payload.results;
+         }
+        
+    //   );
+    //   builder.addMatcher(
+    //     puppyBowlApi.endpoints.createPlayer.matchFulfilled,
+    //     (state, { payload }) => {
+    //       state.list = [...state.list, payload];
+    //     }
       );
     },
-  });
+});
   
 
-export const { addPlayer } = playerSlice.actions;
-
+export const {setSearchQuery} = playerSlice.actions;
+export const selectSearchQuery = (state) => state.puppyBowl.searchQuery;
+export { search };
 export default playerSlice.reducer;

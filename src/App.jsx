@@ -6,9 +6,9 @@ import Players from "./features/Players";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./features/Navbar";
 import About from "./features/About";
-import PlayerForm from "./features/PlayerForm"
-import FindPlayer from "./features/FindPlayer";
+import NewPlayer from "./features/NewPlayer"
 import Player from "./features/Player";
+import NewPlayerForm from "./features/NewPlayer"
 
 
 
@@ -21,11 +21,10 @@ function App() {
         <h1>Welcome to the Puppy Bowl</h1>
         <Navbar />
         <Routes>
+        <Route path="/" element={<Players />} />
           <Route path="/about" element={<About />} />
-          <Route path="/findPlayer/3.1" element={<FindPlayer />} />
-          <Route path="/playerForm/3.2" element={<PlayerForm />} />
-          <Route path="/" element={<Players />} />
           <Route path="/player/:id" element={<Player />} />
+          <Route path="/players/" element={<NewPlayerForm />} />{" "}
         </Routes>
       </div>
     </div>

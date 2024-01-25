@@ -18,3 +18,5 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(puppyBowlApi.middleware),
 });
+
+export const { useGetPlayersQuery } = puppyBowlApi;
